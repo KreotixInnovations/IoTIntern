@@ -1,0 +1,34 @@
+#define BLYNK_TEMPLATE_ID "Your_Blynk_Template_ID"
+#define BLYNK_TEMPLATE_NAME "LED BLINK"
+#define BLYNK_AUTH_TOKEN "Your_Blynk_Auth_Token"
+
+#define BLYNK_PRINT Serial
+#include <ESP8266WiFi.h>
+#include <BlynkSimpleEsp8266.h>
+
+// WiFi Credentials
+char ssid[] = "Your_WiFi_SSID";
+char pass[] = "Your_WiFi_Password";
+
+// LED Pin (Change if using an external LED)
+#define LED_PIN D4  // Built-in LED (GPIO2)
+
+void setup() {
+  Serial.begin(115200);
+  
+  pinMode(LED_PIN, OUTPUT);
+  digitalWrite(LED_PIN, LOW);  // Turn off LED initially
+
+  // Connect to Blynk
+  Blynk.begin(BLYNK_AUTH_TOKEN, ssid, pass);
+}
+
+// Function to control LED via Blynk app button
+BLYNK_WRITE(V0) {
+  int ledState = param.asInt(); // Read button value (1 = ON, 0 = OFF)
+  digitalWrite(LED_PIN, ledState);
+}
+
+void loop() {
+  Blynk.run();  // Keep Blynk connected
+}
